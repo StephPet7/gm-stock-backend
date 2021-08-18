@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import os
 import sys
 from datetime import timedelta
 from pathlib import Path
@@ -30,8 +31,6 @@ if len(sys.argv) >= 2 and sys.argv[1] == 'runserver':
     DEBUG = True
 else:
     DEBUG = False
-
-ALLOWED_HOSTS = []
 
 
 ALLOWED_HOSTS = ['*']
@@ -171,8 +170,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -182,3 +188,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 
 CORS_ALLOWED_ALL_ORIGINS = True
+
