@@ -1,7 +1,8 @@
-from django.shortcuts import render
+import jwt
 
 # Create your views here.
 from rest_framework import status
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
@@ -10,6 +11,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from users.serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from django.conf import settings
 
 
 class CustomUserCreate(APIView):
@@ -22,6 +24,7 @@ class CustomUserCreate(APIView):
             if user:
                 return Response(status=status.HTTP_201_CREATED)
             return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateUserView(APIView):
@@ -77,6 +80,7 @@ class BlackListTokenView(APIView):
             refresh_token = request.data["refresh_token"]
             token = RefreshToken(refresh_token)
             token.blacklist()
+            return Response(status=status.HTTP_200_OK)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -91,8 +95,24 @@ class LoginUser(APIView):
         except TokenError as e:
             raise InvalidToken(e.args[0])
         token_pair = serializer.validated_data
-        user = User.objects.get(email=request.data['email'])
-        user.access_token = token_pair['access']
-        user.refresh_token = token_pair['refresh']
-        user_serializer = RegisterUserSerializer(user)
-        return Response(user_serializer.data)
+        response = Response()
+        response.set_cookie(key="access", value=token_pair['access'], httponly=True)
+        response.set_cookie(key="refresh", value=token_pair['refresh'], httponly=True)
+        return response
+
+
+class RetrieveWithToken(APIView):
+    def get(self, request):
+        token = request.COOKIES.get('access')
+
+        if not token:
+            raise AuthenticationFailed('Unauthenticated!')
+
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Unauthenticated')
+
+        user = User.objects.filter(id=payload['user_id']).first()
+        serializer = RegisterUserSerializer(user)
+        return Response(serializer.data)

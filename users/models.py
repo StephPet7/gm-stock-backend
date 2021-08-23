@@ -46,8 +46,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=200)
     role = models.CharField(max_length=20, choices=Role.choices, default="")
     addDate = models.DateTimeField(auto_now_add=True)
-    access_token = models.CharField(max_length=1000, blank=True)
-    refresh_token = models.CharField(max_length=1000, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 

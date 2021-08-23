@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^retrieve/', RetrieveUser.as_view(), name='retrieve_user'),
     url(r'^logout/blacklist', BlackListTokenView.as_view(), name='logout_user'),
     url(r'^login/', LoginUser.as_view(), name='login_user'),
+    url(r'^token/', RetrieveWithToken.as_view(), name='retrieve_with_token_user'),
 ]
