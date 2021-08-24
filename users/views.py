@@ -37,17 +37,17 @@ class UpdateUserView(APIView):
 
         for key in keys:
             if key == 'email':
-                user.email = data['email'][0]
+                user.email = data['email']
             if key == 'user_name':
-                user.user_name = data['user_name'][0]
+                user.user_name = data['user_name']
             if key == 'name':
-                user.name = data['name'][0]
+                user.name = data['name']
             if key == 'is_active':
-                user.is_active = data['is_active'][0]
+                user.is_active = data['is_active']
             if key == 'password':
-                user.password = data['password'][0]
+                user.password = data['password']
             if key == 'role':
-                user.role = data['role'][0]
+                user.role = data['role']
 
         user.save()
         serializer = RegisterUserSerializer(user)
@@ -96,15 +96,23 @@ class LoginUser(APIView):
             raise InvalidToken(e.args[0])
         token_pair = serializer.validated_data
         response = Response()
-        response.set_cookie(key="access", value=token_pair['access'], httponly=True)
-        response.set_cookie(key="refresh", value=token_pair['refresh'], httponly=True)
+        payload_access = jwt.decode(token_pair['access'], settings.SECRET_KEY, algorithms=['HS256'])
+        payload_refresh = jwt.decode(token_pair['refresh'], settings.SECRET_KEY, algorithms=['HS256'])
+        response.data = {
+            "access": token_pair['access'],
+            "refresh": token_pair['refresh'],
+            "exp_access": payload_access['exp'],
+            "exp_refresh": payload_refresh['exp']
+        }
         return response
 
 
 class RetrieveWithToken(APIView):
     def get(self, request):
-        token = request.COOKIES.get('access')
-
+        try:
+            token = request.headers['Authorization'].split(" ")[1]
+        except KeyError:
+            raise AuthenticationFailed("Unauthenticated!")
         if not token:
             raise AuthenticationFailed('Unauthenticated!')
 
@@ -116,3 +124,4 @@ class RetrieveWithToken(APIView):
         user = User.objects.filter(id=payload['user_id']).first()
         serializer = RegisterUserSerializer(user)
         return Response(serializer.data)
+
