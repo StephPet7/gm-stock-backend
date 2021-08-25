@@ -1,3 +1,4 @@
+
 import jwt
 
 # Create your views here.
@@ -83,28 +84,6 @@ class BlackListTokenView(APIView):
             return Response(status=status.HTTP_200_OK)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-class LoginUser(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request, *args, **kwargs):
-        serializer = TokenObtainPairSerializer(data=request.data)
-        try:
-            serializer.is_valid(raise_exception=True)
-        except TokenError as e:
-            raise InvalidToken(e.args[0])
-        token_pair = serializer.validated_data
-        response = Response()
-        payload_access = jwt.decode(token_pair['access'], settings.SECRET_KEY, algorithms=['HS256'])
-        payload_refresh = jwt.decode(token_pair['refresh'], settings.SECRET_KEY, algorithms=['HS256'])
-        response.data = {
-            "access": token_pair['access'],
-            "refresh": token_pair['refresh'],
-            "exp_access": payload_access['exp'],
-            "exp_refresh": payload_refresh['exp']
-        }
-        return response
 
 
 class RetrieveWithToken(APIView):
