@@ -1,3 +1,4 @@
+import datetime
 
 import jwt
 
@@ -84,6 +85,24 @@ class BlackListTokenView(APIView):
             return Response(status=status.HTTP_200_OK)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = TokenObtainPairSerializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+        token_pair = serializer.validated_data
+        payload_access = jwt.decode(token_pair['access'], settings.SECRET_KEY, algorithms=['HS256'])
+        return Response({
+            "access": token_pair['access'],
+            "refresh": token_pair['refresh'],
+            "access_exp": datetime.datetime.fromtimestamp(payload_access['exp'])
+        })
 
 
 class RetrieveWithToken(APIView):

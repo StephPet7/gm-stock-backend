@@ -16,6 +16,6 @@ urlpatterns = [
     url(r'^update/', UpdateUserView.as_view(), name='update_user'),
     url(r'^all/', AllUsers.as_view(), name='list_users'),
     url(r'^retrieve/', RetrieveUser.as_view(), name='retrieve_user'),
-    url(r'^login/', TokenObtainPairView.as_view(), name='login_user'),
+    url(r'^login/', LoginView.as_view(), name='login_user'),
     url(r'^token/', RetrieveWithToken.as_view(), name='retrieve_with_token_user'),
 ]
