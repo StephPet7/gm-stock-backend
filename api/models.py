@@ -60,6 +60,7 @@ class Delivery(SuperModel):
     deliveryDate = models.DateTimeField(auto_now_add=True)
     commandRows = models.ManyToManyField(CommandRow, through='DeliveryDetails', related_name='deliveries')
     received_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
+    totalProductDelivered = models.IntegerField()
 
 
 class DeliveryDetails(SuperModel):

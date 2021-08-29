@@ -26,7 +26,7 @@ class CommandsViewSet(viewsets.ModelViewSet):
 
 class CommandRowsViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = CommandRow.objects.all()
+    queryset = CommandRow.objects.all().order_by(Command.commandDate)
     serializer_class = CommandRowSerializer
 
 
