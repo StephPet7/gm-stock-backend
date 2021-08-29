@@ -98,6 +98,7 @@ class LoginView(APIView):
             raise InvalidToken(e.args[0])
         token_pair = serializer.validated_data
         payload_access = jwt.decode(token_pair['access'], settings.SECRET_KEY, algorithms=['HS256'])
+        print(payload_access['exp'])
         return Response({
             "access": token_pair['access'],
             "refresh": token_pair['refresh'],
