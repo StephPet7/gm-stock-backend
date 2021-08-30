@@ -29,7 +29,7 @@ class Product(SuperModel):
         KILOGRAM = 'KILOGRAM'
         LITER = 'LITER'
 
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=60, unique=True)
     description = models.CharField(max_length=1500)
     unitPrice = models.FloatField()
     stockUnit = models.CharField(max_length=20, choices=StockUnit.choices, default=StockUnit.UNIT)
