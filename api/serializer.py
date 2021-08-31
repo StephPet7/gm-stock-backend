@@ -11,7 +11,9 @@ class ProductSerializer(serializers.ModelSerializer):
                   'unitPrice',
                   'stockUnit',
                   'stockQuantity',
-                  'alertThreshold')
+                  'alertThreshold',
+                  'addDate')
+        extra_kwargs = {'addDate': {'read_only': True}}
 
 
 class CommandSerializer(serializers.ModelSerializer):
@@ -21,6 +23,7 @@ class CommandSerializer(serializers.ModelSerializer):
                   'commandDate',
                   'totalPrice',
                   'command_by')
+        extra_kwargs = {'addDate': {'read_only': True}}
 
 
 class CommandRowSerializer(serializers.ModelSerializer):
@@ -30,6 +33,7 @@ class CommandRowSerializer(serializers.ModelSerializer):
                   'product',
                   'command',
                   'quantityOrdered')
+        extra_kwargs = {'addDate': {'read_only': True}}
 
 
 class DeliverySerializer(serializers.HyperlinkedModelSerializer):
@@ -38,6 +42,7 @@ class DeliverySerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id',
                   'deliveryDate',
                   'received_by')
+        extra_kwargs = {'addDate': {'read_only': True}}
 
 
 class DeliveryDetailsSerializer(serializers.HyperlinkedModelSerializer):
@@ -47,3 +52,4 @@ class DeliveryDetailsSerializer(serializers.HyperlinkedModelSerializer):
                   'delivery',
                   'commandRow',
                   'quantityDelivered')
+        extra_kwargs = {'addDate': {'read_only': True}}
