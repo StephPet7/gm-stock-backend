@@ -1,4 +1,9 @@
 from rest_framework import viewsets
+from rest_framework import status
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+
 from .serializer import *
 from rest_framework.permissions import IsAuthenticated
 
@@ -8,6 +13,37 @@ class ProductsViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    def put(self, request):
+        product = Product.objects.get(id=request.data['id'])
+        data = dict(request.data)
+        keys = data.keys()
+
+        for key in keys:
+            if key == 'name':
+                product.name = data['name']
+            if key == 'description':
+                product.description = data['description']
+            if key == 'unitPrice':
+                product.unitPrice = data['unitPrice']
+            if key == 'stockUnit':
+                product.stockUnit = data['stockUnit']
+            if key == 'stockQuantity':
+                product.stockQuantity = data['stockQuantity']
+            if key == 'alertThreshold':
+                product.alertThreshold = data['alertThreshold']
+
+        product.save()
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
+
+    def delete(self, request):
+        product = Product.objects.get(id=request.GET['id'])
+        if product:
+            Product.objects.filter(id=request.GET['id']).delete()
+            return Response(data=ProductSerializer(product).data, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class CommandsViewSet(viewsets.ModelViewSet):
@@ -41,3 +77,11 @@ class DeliveryDetailsViewSet(viewsets.ModelViewSet):
     queryset = DeliveryDetails.objects.all()
     serializer_class = DeliverySerializer
 
+
+# Statics
+
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))
+def getCommandRowByCommandId(request):
+    commands = CommandRow.objects.filter(command=request.GET['command_id'])
+    return Response(data=CommandRowSerializer(commands, many=True).data, )
