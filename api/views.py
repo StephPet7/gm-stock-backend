@@ -15,7 +15,7 @@ class ProductsViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
 
     def put(self, request):
-        product = Product.objects.get(id=request.data['id'])
+        product = Product.objects.get(id=request.GET['id'])
         data = dict(request.data)
         keys = data.keys()
 
