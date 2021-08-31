@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from users.serializers import RegisterUserSerializer
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -17,6 +18,8 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class CommandSerializer(serializers.ModelSerializer):
+    command_by = RegisterUserSerializer(many=False)
+
     class Meta:
         model = Command
         fields = ('id',
