@@ -59,6 +59,14 @@ class CommandsViewSet(viewsets.ModelViewSet):
     #     command['command_by'] = serializer.data
     #     return Response(command)
 
+    def delete(self, request):
+        command = Command.objects.get(id=request.GET['id'])
+        if command:
+            Command.objects.filter(id=request.GET['id']).delete()
+            return Response(data=CommandSerializer(command).data, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class CommandRowsViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
