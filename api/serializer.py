@@ -34,7 +34,8 @@ class CommandRowSerializer(serializers.ModelSerializer):
         fields = ('id',
                   'product',
                   'command',
-                  'quantityOrdered')
+                  'quantityOrdered',
+                  'remaining')
         extra_kwargs = {'addDate': {'read_only': True}}
 
 

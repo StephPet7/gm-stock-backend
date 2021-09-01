@@ -69,6 +69,7 @@ class CommandRow(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, default="")
     command = models.ForeignKey(Command, on_delete=models.CASCADE, default="")
     quantityOrdered = models.IntegerField()
+    remaining = models.IntegerField()
 
     def save(self, *args, **kwargs):
         while not self.id:
