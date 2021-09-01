@@ -21,6 +21,7 @@ class CommandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Command
         fields = ('id',
+                  'title',
                   'commandDate',
                   'totalPrice',
                   'command_by')
