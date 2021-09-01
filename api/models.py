@@ -8,16 +8,21 @@ from .utils import *
 
 class Product(models.Model):
     class StockUnit(models.TextChoices):
-        UNIT = 'UNIT'
-        KILOGRAM = 'KILOGRAM'
-        LITER = 'LITER'
+        U = 'U'
+        FF = 'FF'
+        ml = 'ml'
+        m2 = 'm2'
+        m3 = 'm3'
+        L = 'L'
 
-    id = models.CharField(primary_key=True, unique=True, editable=False, blank=True, max_length=30)
+    id = models.CharField(primary_key=True, unique=True,
+                          editable=False, blank=True, max_length=30)
     addDate = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=60, unique=True)
     description = models.CharField(max_length=1500)
     unitPrice = models.FloatField()
-    stockUnit = models.CharField(max_length=20, choices=StockUnit.choices, default=StockUnit.UNIT)
+    stockUnit = models.CharField(
+        max_length=20, choices=StockUnit.choices, default=StockUnit.U)
     stockQuantity = models.FloatField()
     alertThreshold = models.IntegerField()
 
@@ -34,12 +39,16 @@ class Product(models.Model):
 
 
 class Command(models.Model):
-    id = models.CharField(primary_key=True, unique=True, editable=False, blank=True, max_length=30)
+    id = models.CharField(primary_key=True, unique=True,
+                          editable=False, blank=True, max_length=30)
     addDate = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(max_length=200, default="")
     commandDate = models.DateTimeField(auto_now_add=True)
     totalPrice = models.FloatField(default="")
-    products = models.ManyToManyField(Product, through='CommandRow', related_name='commands')
-    command_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
+    products = models.ManyToManyField(
+        Product, through='CommandRow', related_name='commands')
+    command_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
 
     def save(self, *args, **kwargs):
         while not self.id:
@@ -54,7 +63,8 @@ class Command(models.Model):
 
 
 class CommandRow(models.Model):
-    id = models.CharField(primary_key=True, unique=True, editable=False, blank=True, max_length=30)
+    id = models.CharField(primary_key=True, unique=True,
+                          editable=False, blank=True, max_length=30)
     addDate = models.DateTimeField(auto_now_add=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, default="")
     command = models.ForeignKey(Command, on_delete=models.CASCADE, default="")
@@ -70,11 +80,14 @@ class CommandRow(models.Model):
 
 
 class Delivery(models.Model):
-    id = models.CharField(primary_key=True, unique=True, editable=False, blank=True, max_length=30)
+    id = models.CharField(primary_key=True, unique=True,
+                          editable=False, blank=True, max_length=30)
     addDate = models.DateTimeField(auto_now_add=True)
     deliveryDate = models.DateTimeField(auto_now_add=True)
-    commandRows = models.ManyToManyField(CommandRow, through='DeliveryDetails', related_name='deliveries')
-    received_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
+    commandRows = models.ManyToManyField(
+        CommandRow, through='DeliveryDetails', related_name='deliveries')
+    received_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
     totalProductDelivered = models.IntegerField()
 
     def save(self, *args, **kwargs):
@@ -87,9 +100,12 @@ class Delivery(models.Model):
 
 
 class DeliveryDetails(models.Model):
-    id = models.CharField(primary_key=True, unique=True, editable=False, blank=True, max_length=30)
-    delivery = models.ForeignKey(Delivery, on_delete=models.CASCADE, default="")
-    commandRow = models.ForeignKey(CommandRow, on_delete=models.CASCADE, default="")
+    id = models.CharField(primary_key=True, unique=True,
+                          editable=False, blank=True, max_length=30)
+    delivery = models.ForeignKey(
+        Delivery, on_delete=models.CASCADE, default="")
+    commandRow = models.ForeignKey(
+        CommandRow, on_delete=models.CASCADE, default="")
     quantityDelivered = models.IntegerField()
     addDate = models.DateTimeField(auto_now_add=True)
 
