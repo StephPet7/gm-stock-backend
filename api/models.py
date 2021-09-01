@@ -19,7 +19,7 @@ class Product(models.Model):
                           editable=False, blank=True, max_length=30)
     addDate = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=60, unique=True)
-    description = models.CharField(max_length=1500)
+    description = models.CharField(max_length=1500, default="")
     unitPrice = models.FloatField()
     stockUnit = models.CharField(
         max_length=20, choices=StockUnit.choices, default=StockUnit.U)
