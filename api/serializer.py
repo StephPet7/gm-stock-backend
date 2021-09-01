@@ -18,8 +18,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class CommandSerializer(serializers.ModelSerializer):
-    command_by = RegisterUserSerializer(many=False)
-
     class Meta:
         model = Command
         fields = ('id',
