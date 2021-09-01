@@ -97,7 +97,8 @@ class LoginView(APIView):
         except TokenError as e:
             raise InvalidToken(e.args[0])
         token_pair = serializer.validated_data
-        payload_access = jwt.decode(token_pair['access'], settings.SECRET_KEY, algorithms=['HS256'])
+        payload_access = jwt.decode(
+            token_pair['access'], settings.SECRET_KEY, algorithms=['HS256'])
         print(payload_access['exp'])
         return Response({
             "access": token_pair['access'],
@@ -107,6 +108,8 @@ class LoginView(APIView):
 
 
 class RetrieveWithToken(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         try:
             token = request.headers['Authorization'].split(" ")[1]
@@ -116,11 +119,11 @@ class RetrieveWithToken(APIView):
             raise AuthenticationFailed('Unauthenticated!')
 
         try:
-            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            payload = jwt.decode(
+                token, settings.SECRET_KEY, algorithms=["HS256"])
         except jwt.ExpiredSignatureError:
             raise AuthenticationFailed('Unauthenticated')
 
         user = User.objects.filter(id=payload['user_id']).first()
         serializer = RegisterUserSerializer(user)
         return Response(serializer.data)
-
