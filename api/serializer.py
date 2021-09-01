@@ -29,9 +29,6 @@ class CommandSerializer(serializers.ModelSerializer):
 
 
 class CommandRowSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(many=False)
-    command = CommandSerializer(many=False)
-
     class Meta:
         model = CommandRow
         fields = ('id',
