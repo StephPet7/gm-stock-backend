@@ -33,5 +33,8 @@ urlpatterns = [
     url(r'^api/user/', include('users.urls', namespace='users')),
     url(r'^api/token', token_obtain_pair),
     url(r'^api/token/refresh', token_refresh),
-    url(r'^api/commandRow/command', getCommandRowByCommandId, name="commandRows of a commmand")
+    url(r'^api/commandRow/command', getCommandRowByCommandId,
+        name="commandRows of a commmand"),
+    url(r'^api/deliveryDetail/delivery', getDeliveryDetailsByDeliveryId,
+        name="delivery details by delivery id")
 ]

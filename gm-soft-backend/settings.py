@@ -68,9 +68,9 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-CORS_ORIGIN_WHITELIST = {
-    'https://gm-stock.herokuapp.com/'
-}
+CORS_ORIGIN_WHITELIST = [
+    'https://gm-stock.herokuapp.com'
+]
 
 ROOT_URLCONF = 'gm-soft-backend.urls'
 

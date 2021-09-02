@@ -93,3 +93,11 @@ class DeliveryDetailsViewSet(viewsets.ModelViewSet):
 def getCommandRowByCommandId(request):
     commands = CommandRow.objects.filter(command=request.GET['command_id'])
     return Response(data=CommandRowSerializer(commands, many=True).data, )
+
+
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))
+def getDeliveryDetailsByDeliveryId(request):
+    deliveryDetails = DeliveryDetails.objects.filter(
+        delivery=request.GET['delivery_id'])
+    return Response(data=DeliveryDetailsSerializer(deliveryDetails, many=True).data, )

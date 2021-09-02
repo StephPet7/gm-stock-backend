@@ -89,7 +89,6 @@ class Delivery(models.Model):
         CommandRow, through='DeliveryDetails', related_name='deliveries')
     received_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
-    totalProductDelivered = models.IntegerField()
 
     def save(self, *args, **kwargs):
         while not self.id:
