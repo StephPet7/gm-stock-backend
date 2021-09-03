@@ -13,7 +13,8 @@ class CustomAccountManager(BaseUserManager):
         if not email:
             raise ValueError(_('You must provide an email address'))
         email = self.normalize_email(email)
-        user = self.model(email=email, user_name=user_name, name=name, role=role, **other_fields)
+        user = self.model(email=email, user_name=user_name,
+                          name=name, role=role, **other_fields)
         user.set_password(password)
         user.save()
         return user
@@ -39,7 +40,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         SUPERVISOR = 'SUPERVISOR'
         STOREKEEPER = 'STOREKEEPER'
 
-    id = models.CharField(primary_key=True, unique=True, editable=False, blank=True, max_length=30)
+    id = models.CharField(primary_key=True, unique=True,
+                          editable=False, blank=True, max_length=30)
     user_name = models.CharField(max_length=200, unique=True)
     email = models.EmailField(_('Email address'), unique=True)
     name = models.CharField(max_length=150, blank=True)

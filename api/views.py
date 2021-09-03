@@ -70,12 +70,13 @@ class CommandsViewSet(viewsets.ModelViewSet):
 
 class CommandRowsViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = CommandRow.objects.all().order_by('command')
+    queryset = CommandRow.objects.all()
     serializer_class = CommandRowSerializer
 
     def put(self, request):
         commandRow = CommandRow.objects.get(id=request.GET['id'])
         data = dict(request.data)
+        print(data)
         keys = data.keys()
 
         for key in keys:
@@ -88,6 +89,14 @@ class CommandRowsViewSet(viewsets.ModelViewSet):
         serializer = CommandRowSerializer(commandRow)
         return Response(serializer.data)
 
+    def delete(self, request):
+        commandRow = CommandRow.objects.get(id=request.GET['id'])
+        if commandRow:
+            CommandRow.objects.filter(id=request.GET['id']).delete()
+            return Response(data=CommandRowSerializer(commandRow).data, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class DeliveriesViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
@@ -98,7 +107,7 @@ class DeliveriesViewSet(viewsets.ModelViewSet):
 class DeliveryDetailsViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     queryset = DeliveryDetails.objects.all()
-    serializer_class = DeliverySerializer
+    serializer_class = DeliveryDetailsSerializer
 
 
 # Statics

@@ -39,6 +39,7 @@ SESSION_COOKIE_SECUR = True
 CSRF_COOKIE_SECURE = True
 ALLOWED_HOSTS = ['*']
 
+
 # Application definition
 
 INSTALLED_APPS = [
