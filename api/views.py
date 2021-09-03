@@ -73,6 +73,21 @@ class CommandRowsViewSet(viewsets.ModelViewSet):
     queryset = CommandRow.objects.all().order_by('command')
     serializer_class = CommandRowSerializer
 
+    def put(self, request):
+        commandRow = CommandRow.objects.get(id=request.GET['id'])
+        data = dict(request.data)
+        keys = data.keys()
+
+        for key in keys:
+            if key == 'quantityOrdered':
+                commandRow.quantityOrdered = data['quantityOrdered']
+            if key == 'remaining':
+                commandRow.remaining = data['remaining']
+
+        commandRow.save()
+        serializer = CommandRowSerializer(commandRow)
+        return Response(serializer.data)
+
 
 class DeliveriesViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
