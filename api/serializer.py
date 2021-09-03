@@ -39,7 +39,7 @@ class CommandRowSerializer(serializers.ModelSerializer):
         extra_kwargs = {'addDate': {'read_only': True}}
 
 
-class DeliverySerializer(serializers.HyperlinkedModelSerializer):
+class DeliverySerializer(serializers.ModelSerializer):
     class Meta:
         model = Delivery
         fields = ('id',
@@ -48,7 +48,7 @@ class DeliverySerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {'addDate': {'read_only': True}}
 
 
-class DeliveryDetailsSerializer(serializers.HyperlinkedModelSerializer):
+class DeliveryDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeliveryDetails
         fields = ('id',
