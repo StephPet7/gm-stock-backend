@@ -75,6 +75,7 @@ class CommandRowsViewSet(viewsets.ModelViewSet):
 
     def put(self, request):
         commandRow = CommandRow.objects.get(id=request.GET['id'])
+        print(commandRow)
         data = dict(request.data)
         print(data)
         keys = data.keys()
