@@ -116,3 +116,11 @@ def getDeliveryDetailsByDeliveryId(request):
     deliveryDetails = DeliveryDetails.objects.filter(
         delivery=request.GET['delivery_id'])
     return Response(data=DeliveryDetailsSerializer(deliveryDetails, many=True).data, )
+
+
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))
+def getProductQuantityById(request):
+    product = Product.objects.get(id=request.GET['product_id'])
+    response = {"stockQuantity": product.stockQuantity}
+    return Response(data=response)

@@ -36,5 +36,7 @@ urlpatterns = [
     url(r'^api/commandRow/command', getCommandRowByCommandId,
         name="commandRows of a commmand"),
     url(r'^api/deliveryDetail/delivery', getDeliveryDetailsByDeliveryId,
-        name="delivery details by delivery id")
+        name="delivery details by delivery id"),
+    url(r'^api/product/quantity', getProductQuantityById,
+        name="get product quantity by id")
 ]
