@@ -103,6 +103,14 @@ class DeliveriesViewSet(viewsets.ModelViewSet):
     queryset = Delivery.objects.all()
     serializer_class = DeliverySerializer
 
+    def delete(self, request):
+        delivery = Delivery.objects.get(id=request.GET['id'])
+        if delivery:
+            Delivery.objects.filter(id=request.GET['id']).delete()
+            return Response(data=DeliverySerializer(delivery).data, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class DeliveryDetailsViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
