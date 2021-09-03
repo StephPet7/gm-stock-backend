@@ -64,6 +64,14 @@ class AllUsers(APIView):
         serializer = RegisterUserSerializer(users, many=True)
         return Response(serializer.data)
 
+    def delete(self, request):
+        user = User.objects.get(id=request.GET['id'])
+        if user:
+            User.objects.filter(id=request.GET['id']).delete()
+            return Response(data=RegisterUserSerializer(user).data, status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 class RetrieveUser(APIView):
     permission_classes = (IsAuthenticated,)
