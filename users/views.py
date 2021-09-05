@@ -14,6 +14,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from users.serializers import *
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.conf import settings
+from api.utils import get_random_alphanumeric_string
+from django.core.mail import BadHeaderError, send_mail
+from django.core import mail
 
 
 class CustomUserCreate(APIView):
@@ -22,8 +25,16 @@ class CustomUserCreate(APIView):
     def post(self, request):
         reg_serializer = RegisterUserSerializer(data=request.data)
         if reg_serializer.is_valid():
-            user = reg_serializer.save()
+            (user, user_password) = reg_serializer.save()
             if user:
+                print(user)
+                try:
+                    send_mail('Mot de passe de votre compte sur l\'application GM-STOCK',
+                              'Dans le cadre de la création de votre compte '+user.role +
+                              ' sur l\'application GM-STOCK le mot le mot de passe suivant vous est octroyé pour pouvoir vous connecter:  ' + user_password,
+                              'gmstock0@gmail.com', [user.email], fail_silently=False)
+                except BadHeaderError:
+                    return Response(data={"message": "Invalid Header found"}, status=status.HTTP_400_BAD_REQUEST)
                 return Response(data=RegisterUserSerializer(user).data, status=status.HTTP_201_CREATED)
             return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

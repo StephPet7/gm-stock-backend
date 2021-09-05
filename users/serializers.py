@@ -7,17 +7,17 @@ from users.models import *
 class RegisterUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'user_name',
-                  'password', 'role', 'name', 'is_active', 'addDate']
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ['id', 'email', 'user_name', 'password',
+                  'role', 'name', 'is_active', 'addDate']
+        extra_kwargs = {'password': {'read_only': True}}
 
     def create(self, validated_data):
-        password = validated_data.pop('password', None)
+        password = get_random_alphanumeric_string(7)
         instance = self.Meta.model(**validated_data)
         if password is not None:
             instance.set_password(password)
         instance.save()
-        return instance
+        return (instance, password)
 
     def update(self, instance, validated_data):
         user = self.context['request'].user

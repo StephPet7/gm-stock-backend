@@ -36,9 +36,9 @@ class CustomAccountManager(BaseUserManager):
 # Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):
     class Role(models.TextChoices):
-        ADMINISTRATOR = 'ADMINISTRATOR'
-        SUPERVISOR = 'SUPERVISOR'
-        STOREKEEPER = 'STOREKEEPER'
+        ADMINISTRATEUR = 'ADMINISTRATEUR'
+        SUPERVISEUR = 'SUPERVISEUR'
+        MAGASINIER = 'MAGASINIER'
 
     id = models.CharField(primary_key=True, unique=True,
                           editable=False, blank=True, max_length=30)
