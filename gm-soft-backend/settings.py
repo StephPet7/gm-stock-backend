@@ -32,13 +32,12 @@ if len(sys.argv) >= 2 and sys.argv[1] == 'runserver':
 else:
     DEBUG = False
 
-
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECUR = True
 CSRF_COOKIE_SECURE = True
-ALLOWED_HOSTS = ['*']
 
+ALLOWED_HOSTS = ['*']
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST_USER = 'gmstock0@gmail.com'

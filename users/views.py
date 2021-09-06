@@ -44,7 +44,7 @@ class UpdateUserView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def put(self, request):
-        user = User.objects.get(id=request.data['id'])
+        user = User.objects.get(id=request.GET['id'])
         data = dict(request.data)
         keys = data.keys()
 
