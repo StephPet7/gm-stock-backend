@@ -32,7 +32,8 @@ class CustomUserCreate(APIView):
                     send_mail('Mot de passe de votre compte sur l\'application GM-STOCK',
                               'Dans le cadre de la création de votre compte '+user.role +
                               ' sur l\'application GM-STOCK le mot le mot de passe suivant vous est octroyé pour pouvoir vous connecter:  ' + user_password,
-                              'gmstock0@gmail.com', [user.email], fail_silently=False)
+                              settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+                    print('iciiiiiiiiiii')
                 except BadHeaderError:
                     return Response(data={"message": "Invalid Header found"}, status=status.HTTP_400_BAD_REQUEST)
                 return Response(data=RegisterUserSerializer(user).data, status=status.HTTP_201_CREATED)
