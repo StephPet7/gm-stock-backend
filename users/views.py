@@ -20,7 +20,7 @@ from django.core import mail
 
 
 class CustomUserCreate(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         reg_serializer = RegisterUserSerializer(data=request.data)
