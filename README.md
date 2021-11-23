@@ -6,5 +6,7 @@ The fronted has been implemented using Angular framework.
 The application has been deployed on Heroku and is accessible through the link: https://gm-stock-frontend.herokuapp.com/. 
 
 Connection credentials:
+
 Email: admin@mail.com
+
 Password: admin
