@@ -1,5 +1,5 @@
 import datetime
-
+import smtplib
 import jwt
 
 # Create your views here.
@@ -34,9 +34,12 @@ class CustomUserCreate(APIView):
                               ' sur l\'application GM-STOCK le mot le mot de passe suivant vous est octroyé pour pouvoir vous connecter:  ' + user_password,
                               settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
                     print('iciiiiiiiiiii')
+                except smtplib.SMTPAuthenticationError:
+                    return Response(data={"message": "Mail for registration has not been sent"}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
                 except BadHeaderError:
                     return Response(data={"message": "Invalid Header found"}, status=status.HTTP_400_BAD_REQUEST)
-                return Response(data=RegisterUserSerializer(user).data, status=status.HTTP_201_CREATED)
+                else:
+                    return Response(data=RegisterUserSerializer(user).data, status=status.HTTP_201_CREATED)
             return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
